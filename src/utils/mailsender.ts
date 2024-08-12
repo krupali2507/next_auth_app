@@ -4,7 +4,7 @@ import { hashToken } from "@/utils/hashing";
 
 const sendEmail = async ({ email, emailType, userId }: any) => {
   try {
-    const hashedToken = await hashToken(userId);
+    const hashedToken = await hashToken(userId.toString());
     if (emailType === "VERIFY") {
       await User.findByIdAndUpdate(userId, {
         verifyToken: hashedToken,
@@ -18,18 +18,18 @@ const sendEmail = async ({ email, emailType, userId }: any) => {
     }
 
     const transporter = nodemailer.createTransport({
-      host: "live.smtp.mailtrap.io",
-      port: 587,
+      host: "sandbox.smtp.mailtrap.io",
+      port: process.env.SENDER_HOST,
       auth: {
-        user: "api",
-        pass: "b96a45c52086692c41376e15720ce588",
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
       },
-    });
+    } as any); // temporary just to remove error
 
     const verifyLink = `${process.env.DOMAIN}/verifyemail?token=${hashedToken}`;
 
     const mailOptions = {
-      from: "pratipalrao619@gmail.com", // sender address
+      from: process.env.SENDER_EMAIL, // sender address
       to: email, // list of receivers
       subject:
         emailType === "VERIFY" ? "Verify Your account" : "Reset Your Password", // Subject line
@@ -40,11 +40,10 @@ const sendEmail = async ({ email, emailType, userId }: any) => {
       ${verifyLink}
       </p>`, // html body
     };
-
     const mailResponse = await transporter.sendMail(mailOptions);
     return mailResponse;
   } catch (error: any) {
-    throw new Error(error.message);
+    throw new Error(error);
   }
 };
 
