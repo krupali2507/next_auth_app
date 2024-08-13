@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -27,12 +28,10 @@ const LoginPage = () => {
       e.preventDefault();
       setLoading(true);
       const apiResponse = await axios.post("/api/users/login", userData);
-      console.log("🚀 ~ onLogin ~ apiResponse:", apiResponse);
-      console.log("apiResponse.data", apiResponse.data);
       router.push("/profile");
     } catch (error: any) {
       console.log("🚀 ~ onLogin ~ error:", error);
-      console.error("Login failed!");
+
       toast.error(error.message);
     }
   };
@@ -84,6 +83,12 @@ const LoginPage = () => {
             >
               {loading ? "Processing...." : "Login"}
             </button>
+            <p>
+              Not Registered yet? Please
+              <Link href="/signup" className="text-blue-700">
+                Register!
+              </Link>
+            </p>
           </div>
         </form>
       </div>

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const SignupPage = () => {
   const router = useRouter();
@@ -101,6 +102,13 @@ const SignupPage = () => {
             >
               {loading ? "Processing...." : "Signup"}
             </button>
+            <p>
+              Already Registered? Please
+              <Link href="/login" className="text-blue-700">
+                Login
+              </Link>
+              .
+            </p>
           </div>
         </form>
       </div>
