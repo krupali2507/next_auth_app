@@ -37,10 +37,13 @@ export async function POST(request: NextRequest) {
       expiresIn: "1d",
     });
 
-    return NextResponse.json(
+    const response = NextResponse.json(
       { success: true, message: "Logged in successfully!" },
       { status: 200 }
-    ).cookies.set("token", jsonWebToken, { httpOnly: true });
+    );
+
+    response.cookies.set("token", jsonWebToken, { httpOnly: true });
+    return response;
   } catch (error: any) {
     console.log("🚀 ~ POST ~ error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });

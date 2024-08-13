@@ -5,10 +5,12 @@ dbconnection();
 
 export async function POST(request: NextRequest) {
   try {
-    return NextResponse.json(
+    const response = NextResponse.json(
       { success: true, message: "Logout successfully!" },
       { status: 200 }
-    ).cookies.set("token", "", { expires: Date.now(), httpOnly: true });
+    );
+    response.cookies.set("token", "", { expires: Date.now(), httpOnly: true });
+    return response;
   } catch (error: any) {
     console.log("🚀 ~ POST ~ error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
